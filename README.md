@@ -1,16 +1,166 @@
-# React + Vite
+# TaskFlow
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A Full Stack Task Management Application built using Spring Boot and React.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Authentication
 
-## React Compiler
+- User Registration
+- User Login
+- JWT Authentication
+- Protected Routes
+- Refresh Token
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Task Management
 
-## Expanding the Oxlint configuration
+- Create Task
+- View Task List
+- Update Task
+- Delete Task
+- Search Tasks
+- Pagination
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+### API Documentation
+
+- Swagger UI
+
+## Tech Stack
+
+### Backend
+
+- Java 17
+- Spring Boot 3
+- Spring Security 6
+- JWT Authentication
+- Spring Data JPA
+- Hibernate
+- MySQL
+- Swagger / OpenAPI
+- Maven
+
+### Frontend
+
+- React
+- Vite
+- React Router
+- Axios
+
+### Deployment
+
+- Backend: Railway
+- Frontend: Vercel
+
+## Project Structure
+
+```text
+taskflow
+├── backend
+│   ├── controller
+│   ├── service
+│   ├── repository
+│   ├── entity
+│   └── security
+│
+└── taskflow-frontend
+    ├── pages
+    ├── services
+    ├── components
+    └── routes
+```
+
+## Backend Setup
+
+### Run Backend
+
+```bash
+./mvnw spring-boot:run
+```
+
+### Build Backend
+
+```bash
+./mvnw clean package
+```
+
+## Frontend Setup
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Run Development Server
+
+```bash
+npm run dev
+```
+
+### Build Production
+
+```bash
+npm run build
+```
+
+## API Endpoints
+
+### Authentication
+
+```http
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/refresh-token
+```
+
+### Tasks
+
+```http
+GET    /api/tasks
+GET    /api/tasks/{id}
+POST   /api/tasks
+PUT    /api/tasks/{id}
+DELETE /api/tasks/{id}
+```
+
+## Search Example
+
+```http
+GET /api/tasks?keyword=react
+```
+
+## Pagination Example
+
+```http
+GET /api/tasks?page=0&size=5
+```
+
+## Deployment
+
+### Railway
+
+Backend deployed on Railway.
+
+### Vercel
+
+Frontend deployed on Vercel.
+
+## Author
+
+Nguyen Thi Kim Hue
+
+## Status
+
+✅ Authentication
+
+✅ JWT Security
+
+✅ CRUD Tasks
+
+✅ Search
+
+✅ Pagination
+
+✅ Railway Deployment
+
+✅ Vercel Deployment
