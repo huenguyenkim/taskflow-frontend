@@ -1,64 +1,41 @@
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
+  const token = localStorage.getItem("accessToken");
 
-    const token =
-        localStorage.getItem(
-            "accessToken"
-        );
+  const logout = () => {
+    localStorage.clear();
 
-    const logout = () => {
+    window.location.href = "/login";
+  };
 
-        localStorage.clear();
+  return (
+    <nav
+      style={{
+        padding: "16px",
+        borderBottom: "1px solid #ddd",
+        marginBottom: "20px",
+      }}
+    >
+      <Link to="/tasks">Tasks</Link>
 
-        window.location.href =
-            "/login";
-    };
+      {" | "}
 
-    return (
+      <Link to="/profile">Profile</Link>
 
-        <nav
-            style={{
-                padding: "16px",
-                borderBottom:
-                    "1px solid #ddd",
-                marginBottom: "20px",
-            }}
-        >
+      {" | "}
 
-            <Link to="/tasks">
-                Tasks
-            </Link>
+      {!token ? (
+        <>
+          <Link to="/login">Login</Link>
 
-            {" | "}
+          {" | "}
 
-            <Link to="/profile">
-                Profile
-            </Link>
-
-            {" | "}
-
-            {!token ? (
-                <>
-                    <Link to="/login">
-                        Login
-                    </Link>
-
-                    {" | "}
-
-                    <Link to="/register">
-                        Register
-                    </Link>
-                </>
-            ) : (
-                <button
-                    onClick={logout}
-                >
-                    Logout
-                </button>
-            )}
-
-        </nav>
-
-    );
+          <Link to="/register">Register</Link>
+        </>
+      ) : (
+        <button onClick={logout}>Logout</button>
+      )}
+    </nav>
+  );
 }

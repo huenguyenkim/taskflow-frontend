@@ -1,9 +1,4 @@
-import {
-    BrowserRouter,
-    Routes,
-    Route,
-    Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -14,84 +9,59 @@ import EditTask from "./pages/EditTask";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
+  const token = localStorage.getItem("accessToken");
 
-    const token =
-        localStorage.getItem(
-            "accessToken"
-        );
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Home */}
 
-    return (
-        <BrowserRouter>
+        <Route
+          path="/"
+          element={token ? <Navigate to="/tasks" /> : <Navigate to="/login" />}
+        />
 
-            <Routes>
+        {/* Public Routes */}
 
-                {/* Home */}
+        <Route path="/login" element={<Login />} />
 
-                <Route
-                    path="/"
-                    element={
-                        token
-                            ? <Navigate to="/tasks" />
-                            : <Navigate to="/login" />
-                    }
-                />
+        <Route path="/register" element={<Register />} />
 
-                {/* Public Routes */}
+        {/* Protected Routes */}
 
-                <Route
-                    path="/login"
-                    element={<Login />}
-                />
+        <Route
+          path="/tasks"
+          element={
+            <ProtectedRoute>
+              <TaskList />
+            </ProtectedRoute>
+          }
+        />
 
-                <Route
-                    path="/register"
-                    element={<Register />}
-                />
+        <Route
+          path="/tasks/create"
+          element={
+            <ProtectedRoute>
+              <CreateTask />
+            </ProtectedRoute>
+          }
+        />
 
-                {/* Protected Routes */}
+        <Route
+          path="/tasks/edit/:id"
+          element={
+            <ProtectedRoute>
+              <EditTask />
+            </ProtectedRoute>
+          }
+        />
 
-                <Route
-                    path="/tasks"
-                    element={
-                        <ProtectedRoute>
-                            <TaskList />
-                        </ProtectedRoute>
-                    }
-                />
+        {/* 404 */}
 
-                <Route
-                    path="/tasks/create"
-                    element={
-                        <ProtectedRoute>
-                            <CreateTask />
-                        </ProtectedRoute>
-                    }
-                />
-
-                <Route
-                    path="/tasks/edit/:id"
-                    element={
-                        <ProtectedRoute>
-                            <EditTask />
-                        </ProtectedRoute>
-                    }
-                />
-
-                {/* 404 */}
-
-                <Route
-                    path="*"
-                    element={
-                        <h1>
-                            404 - Page Not Found
-                        </h1>
-                    }
-                />
-
-            </Routes>
-
-        </BrowserRouter>
-    );
+        <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

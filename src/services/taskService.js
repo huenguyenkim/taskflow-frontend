@@ -1,62 +1,38 @@
 import api from "./api";
 
 export const getTasks = async (
-    page = 0,
-    size = 5,
-    keyword = "",
-    status = ""
+  page = 0,
+  size = 5,
+  keyword = "",
+  status = "",
 ) => {
+  const response = await api.get(
+    `/tasks?page=${page}&size=${size}&keyword=${keyword}&status=${status}`,
+  );
 
-    const response = await api.get(
-        `/tasks?page=${page}&size=${size}&keyword=${keyword}&status=${status}`
-    );
-
-    return response.data;
+  return response.data;
 };
 
-export const createTask = async (
-    task
-) => {
+export const createTask = async (task) => {
+  const response = await api.post("/tasks", task);
 
-    const response = await api.post(
-        "/tasks",
-        task
-    );
-
-    return response.data;
+  return response.data;
 };
 
-export const getTaskById = async (
-    id
-) => {
+export const getTaskById = async (id) => {
+  const response = await api.get(`/tasks/${id}`);
 
-    const response = await api.get(
-        `/tasks/${id}`
-    );
-
-    return response.data;
+  return response.data;
 };
 
-export const updateTask = async (
-    id,
-    task
-) => {
+export const updateTask = async (id, task) => {
+  const response = await api.put(`/tasks/${id}`, task);
 
-    const response = await api.put(
-        `/tasks/${id}`,
-        task
-    );
-
-    return response.data;
+  return response.data;
 };
 
-export const deleteTask = async (
-    id
-) => {
+export const deleteTask = async (id) => {
+  const response = await api.delete(`/tasks/${id}`);
 
-    const response = await api.delete(
-        `/tasks/${id}`
-    );
-
-    return response.data;
+  return response.data;
 };

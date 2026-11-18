@@ -1,79 +1,53 @@
 import { useState } from "react";
-import {
-    useNavigate,
-    Link,
-} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
-import { register }
-    from "../services/authService";
+import { register } from "../services/authService";
 
 function Register() {
+  const navigate = useNavigate();
 
-    const navigate =
-        useNavigate();
+  const [username, setUsername] = useState("");
 
-    const [username, setUsername] =
-        useState("");
+  const [email, setEmail] = useState("");
 
-    const [email, setEmail] =
-        useState("");
+  const [password, setPassword] = useState("");
 
-    const [password, setPassword] =
-        useState("");
+  const [loading, setLoading] = useState(false);
 
-    const [loading, setLoading] =
-        useState(false);
+  const [error, setError] = useState("");
 
-    const [error, setError] =
-        useState("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const handleSubmit = async (e) => {
+    try {
+      setLoading(true);
+      setError("");
 
-        e.preventDefault();
+      await register({
+        username,
+        email,
+        password,
+      });
 
-        try {
+      alert("Register successful!");
 
-            setLoading(true);
-            setError("");
+      navigate("/login");
+    } catch (err) {
+      console.log("REGISTER ERROR:", err);
 
-            await register({
-                username,
-                email,
-                password,
-            });
+      setError(
+        err.response?.data?.message ||
+          JSON.stringify(err.response?.data) ||
+          err.message,
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            alert(
-                "Register successful!"
-            );
-
-            navigate("/login");
-
-        } catch (err) {
-
-            console.log(
-                "REGISTER ERROR:",
-                err
-            );
-
-            setError(
-                err.response?.data?.message ||
-                JSON.stringify(
-                    err.response?.data
-                ) ||
-                err.message
-            );
-
-        } finally {
-
-            setLoading(false);
-
-        }
-    };
-
-    return (
-
-        <div
-            className="
+  return (
+    <div
+      className="
         min-h-screen
         flex
         items-center
@@ -81,10 +55,9 @@ function Register() {
         bg-gray-100
         px-4
       "
-        >
-
-            <div
-                className="
+    >
+      <div
+        className="
           bg-white
           shadow-lg
           rounded-xl
@@ -92,35 +65,26 @@ function Register() {
           w-full
           max-w-md
         "
-            >
-
-                <h1
-                    className="
+      >
+        <h1
+          className="
             text-3xl
             font-bold
             text-center
             mb-6
           "
-                >
-                    TaskFlow Register
-                </h1>
+        >
+          TaskFlow Register
+        </h1>
 
-                <form
-                    onSubmit={handleSubmit}
-                    className="space-y-4"
-                >
-
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) =>
-                            setUsername(
-                                e.target.value
-                            )
-                        }
-                        required
-                        className="
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            className="
               w-full
               border
               border-gray-300
@@ -131,19 +95,15 @@ function Register() {
               focus:ring-2
               focus:ring-blue-500
             "
-                    />
+          />
 
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) =>
-                            setEmail(
-                                e.target.value
-                            )
-                        }
-                        required
-                        className="
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="
               w-full
               border
               border-gray-300
@@ -154,19 +114,15 @@ function Register() {
               focus:ring-2
               focus:ring-blue-500
             "
-                    />
+          />
 
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) =>
-                            setPassword(
-                                e.target.value
-                            )
-                        }
-                        required
-                        className="
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="
               w-full
               border
               border-gray-300
@@ -177,12 +133,12 @@ function Register() {
               focus:ring-2
               focus:ring-blue-500
             "
-                    />
+          />
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="
+          <button
+            type="submit"
+            disabled={loading}
+            className="
               w-full
               bg-blue-500
               hover:bg-blue-600
@@ -192,55 +148,45 @@ function Register() {
               font-semibold
               disabled:opacity-50
             "
-                    >
-                        {loading
-                            ? "Registering..."
-                            : "Register"}
-                    </button>
+          >
+            {loading ? "Registering..." : "Register"}
+          </button>
+        </form>
 
-                </form>
-
-                {error && (
-
-                    <p
-                        className="
+        {error && (
+          <p
+            className="
               text-red-500
               text-center
               mt-4
             "
-                    >
-                        {error}
-                    </p>
+          >
+            {error}
+          </p>
+        )}
 
-                )}
-
-                <p
-                    className="
+        <p
+          className="
             text-center
             mt-6
             text-gray-600
           "
-                >
-
-                    Already have an account?
-
-                    <Link
-                        to="/login"
-                        className="
+        >
+          Already have an account?
+          <Link
+            to="/login"
+            className="
               text-blue-500
               hover:underline
               ml-1
             "
-                    >
-                        Login
-                    </Link>
-
-                </p>
-
-            </div>
-
-        </div>
-    );
+          >
+            Login
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export default Register;

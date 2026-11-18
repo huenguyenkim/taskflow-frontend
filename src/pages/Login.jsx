@@ -5,74 +5,46 @@ import { toast } from "react-toastify";
 import { login } from "../services/authService";
 
 export default function Login() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const [email, setEmail] = useState("");
 
-    const [email, setEmail] =
-        useState("");
+  const [password, setPassword] = useState("");
 
-    const [password, setPassword] =
-        useState("");
+  const [loading, setLoading] = useState(false);
 
-    const [loading, setLoading] =
-        useState(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const handleSubmit = async (e) => {
+    try {
+      setLoading(true);
 
-        e.preventDefault();
+      const response = await login({
+        email,
+        password,
+      });
 
-        try {
+      localStorage.setItem("accessToken", response.accessToken);
 
-            setLoading(true);
+      localStorage.setItem("refreshToken", response.refreshToken);
 
-            const response = await login({
-                email,
-                password,
-            });
+      localStorage.setItem("username", response.username);
 
-            localStorage.setItem(
-                "accessToken",
-                response.accessToken
-            );
+      localStorage.setItem("role", response.role);
 
-            localStorage.setItem(
-                "refreshToken",
-                response.refreshToken
-            );
+      toast.success("Login successful!");
 
-            localStorage.setItem(
-                "username",
-                response.username
-            );
+      navigate("/tasks");
+    } catch (err) {
+      toast.error("Invalid email or password");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            localStorage.setItem(
-                "role",
-                response.role
-            );
-
-            toast.success(
-                "Login successful!"
-            );
-
-            navigate("/tasks");
-
-        } catch (err) {
-
-            toast.error(
-                "Invalid email or password"
-            );
-
-        } finally {
-
-            setLoading(false);
-
-        }
-    };
-
-    return (
-
-        <div
-            className="
+  return (
+    <div
+      className="
         min-h-screen
         flex
         items-center
@@ -80,10 +52,9 @@ export default function Login() {
         bg-gray-100
         px-4
       "
-        >
-
-            <div
-                className="
+    >
+      <div
+        className="
           bg-white
           shadow-lg
           rounded-xl
@@ -91,45 +62,36 @@ export default function Login() {
           w-full
           max-w-md
         "
-            >
-
-                <h1
-                    className="
+      >
+        <h1
+          className="
             text-3xl
             font-bold
             text-center
             mb-2
           "
-                >
-                    TaskFlow
-                </h1>
+        >
+          TaskFlow
+        </h1>
 
-                <p
-                    className="
+        <p
+          className="
             text-center
             text-gray-500
             mb-6
           "
-                >
-                    Sign in to your account
-                </p>
+        >
+          Sign in to your account
+        </p>
 
-                <form
-                    onSubmit={handleSubmit}
-                    className="space-y-4"
-                >
-
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) =>
-                            setEmail(
-                                e.target.value
-                            )
-                        }
-                        required
-                        className="
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="
               w-full
               border
               border-gray-300
@@ -140,19 +102,15 @@ export default function Login() {
               focus:ring-2
               focus:ring-blue-500
             "
-                    />
+          />
 
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) =>
-                            setPassword(
-                                e.target.value
-                            )
-                        }
-                        required
-                        className="
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="
               w-full
               border
               border-gray-300
@@ -163,12 +121,12 @@ export default function Login() {
               focus:ring-2
               focus:ring-blue-500
             "
-                    />
+          />
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="
+          <button
+            type="submit"
+            disabled={loading}
+            className="
               w-full
               bg-blue-500
               hover:bg-blue-600
@@ -178,39 +136,31 @@ export default function Login() {
               font-semibold
               disabled:opacity-50
             "
-                    >
-                        {loading
-                            ? "Logging in..."
-                            : "Login"}
-                    </button>
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
 
-                </form>
-
-                <p
-                    className="
+        <p
+          className="
             text-center
             mt-6
             text-gray-600
           "
-                >
-                    Don't have an account?
-
-                    <Link
-                        to="/register"
-                        className="
+        >
+          Don't have an account?
+          <Link
+            to="/register"
+            className="
               ml-1
               text-blue-500
               hover:underline
             "
-                    >
-                        Register
-                    </Link>
-
-                </p>
-
-            </div>
-
-        </div>
-
-    );
+          >
+            Register
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
 }
