@@ -2,12 +2,13 @@ import api from "./api";
 
 export const getTasks = async (
     page = 0,
-    size = 10,
-    keyword = ""
+    size = 5,
+    keyword = "",
+    status = ""
 ) => {
 
     const response = await api.get(
-        `/tasks?page=${page}&size=${size}&keyword=${keyword}`
+        `/tasks?page=${page}&size=${size}&keyword=${keyword}&status=${status}`
     );
 
     return response.data;

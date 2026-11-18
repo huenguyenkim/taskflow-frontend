@@ -1,10 +1,16 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { register } from "../services/authService";
+import {
+    useNavigate,
+    Link,
+} from "react-router-dom";
+
+import { register }
+    from "../services/authService";
 
 function Register() {
 
-    const navigate = useNavigate();
+    const navigate =
+        useNavigate();
 
     const [username, setUsername] =
         useState("");
@@ -21,135 +27,217 @@ function Register() {
     const [error, setError] =
         useState("");
 
-    const handleSubmit =
-        async (e) => {
+    const handleSubmit = async (e) => {
 
-            e.preventDefault();
+        e.preventDefault();
 
-            try {
+        try {
 
-                setLoading(true);
-                setError("");
+            setLoading(true);
+            setError("");
 
-                await register({
-                    username,
-                    email,
-                    password,
-                });
+            await register({
+                username,
+                email,
+                password,
+            });
 
-                alert(
-                    "Register successful!"
-                );
+            alert(
+                "Register successful!"
+            );
 
-                navigate("/login");
+            navigate("/login");
 
-            }catch (err) {
+        } catch (err) {
 
-                console.log("REGISTER ERROR:", err);
+            console.log(
+                "REGISTER ERROR:",
+                err
+            );
 
-                console.log(
-                    "RESPONSE:",
+            setError(
+                err.response?.data?.message ||
+                JSON.stringify(
                     err.response?.data
-                );
+                ) ||
+                err.message
+            );
 
-                setError(
-                    err.response?.data?.message ||
-                    JSON.stringify(
-                        err.response?.data
-                    ) ||
-                    err.message
-                );
-            } finally {
+        } finally {
 
-                setLoading(false);
+            setLoading(false);
 
-            }
-        };
+        }
+    };
 
     return (
 
         <div
-            style={{
-                maxWidth: "400px",
-                margin: "50px auto",
-            }}
+            className="
+        min-h-screen
+        flex
+        items-center
+        justify-center
+        bg-gray-100
+        px-4
+      "
         >
 
-            <h1>Register</h1>
+            <div
+                className="
+          bg-white
+          shadow-lg
+          rounded-xl
+          p-8
+          w-full
+          max-w-md
+        "
+            >
 
-            <form onSubmit={handleSubmit}>
-
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) =>
-                        setUsername(e.target.value)
-                    }
-                    required
-                />
-
-                <br />
-                <br />
-
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) =>
-                        setEmail(e.target.value)
-                    }
-                    required
-                />
-
-                <br />
-                <br />
-
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) =>
-                        setPassword(e.target.value)
-                    }
-                    required
-                />
-
-                <br />
-                <br />
-
-                <button
-                    type="submit"
-                    disabled={loading}
+                <h1
+                    className="
+            text-3xl
+            font-bold
+            text-center
+            mb-6
+          "
                 >
-                    {loading
-                        ? "Registering..."
-                        : "Register"}
-                </button>
+                    TaskFlow Register
+                </h1>
 
-            </form>
+                <form
+                    onSubmit={handleSubmit}
+                    className="space-y-4"
+                >
 
-            {error && (
+                    <input
+                        type="text"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) =>
+                            setUsername(
+                                e.target.value
+                            )
+                        }
+                        required
+                        className="
+              w-full
+              border
+              border-gray-300
+              rounded-lg
+              px-4
+              py-3
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-500
+            "
+                    />
+
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) =>
+                            setEmail(
+                                e.target.value
+                            )
+                        }
+                        required
+                        className="
+              w-full
+              border
+              border-gray-300
+              rounded-lg
+              px-4
+              py-3
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-500
+            "
+                    />
+
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) =>
+                            setPassword(
+                                e.target.value
+                            )
+                        }
+                        required
+                        className="
+              w-full
+              border
+              border-gray-300
+              rounded-lg
+              px-4
+              py-3
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-500
+            "
+                    />
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="
+              w-full
+              bg-blue-500
+              hover:bg-blue-600
+              text-white
+              py-3
+              rounded-lg
+              font-semibold
+              disabled:opacity-50
+            "
+                    >
+                        {loading
+                            ? "Registering..."
+                            : "Register"}
+                    </button>
+
+                </form>
+
+                {error && (
+
+                    <p
+                        className="
+              text-red-500
+              text-center
+              mt-4
+            "
+                    >
+                        {error}
+                    </p>
+
+                )}
 
                 <p
-                    style={{
-                        color: "red",
-                    }}
+                    className="
+            text-center
+            mt-6
+            text-gray-600
+          "
                 >
-                    {error}
+
+                    Already have an account?
+
+                    <Link
+                        to="/login"
+                        className="
+              text-blue-500
+              hover:underline
+              ml-1
+            "
+                    >
+                        Login
+                    </Link>
+
                 </p>
 
-            )}
-
-            <p>
-
-                Already have an account?
-
-                <Link to="/login">
-                    {" "}Login
-                </Link>
-
-            </p>
+            </div>
 
         </div>
     );

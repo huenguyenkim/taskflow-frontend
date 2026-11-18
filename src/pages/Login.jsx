@@ -1,20 +1,29 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 import { login } from "../services/authService";
 
 export default function Login() {
 
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [email, setEmail] =
+        useState("");
+
+    const [password, setPassword] =
+        useState("");
+
+    const [loading, setLoading] =
+        useState(false);
 
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
         try {
+
+            setLoading(true);
 
             const response = await login({
                 email,
@@ -41,67 +50,167 @@ export default function Login() {
                 response.role
             );
 
+            toast.success(
+                "Login successful!"
+            );
+
             navigate("/tasks");
 
         } catch (err) {
 
-            setError(
+            toast.error(
                 "Invalid email or password"
             );
+
+        } finally {
+
+            setLoading(false);
+
         }
     };
 
     return (
 
         <div
-            style={{
-                maxWidth: "400px",
-                margin: "50px auto",
-            }}
+            className="
+        min-h-screen
+        flex
+        items-center
+        justify-center
+        bg-gray-100
+        px-4
+      "
         >
 
-            <h1>Login</h1>
+            <div
+                className="
+          bg-white
+          shadow-lg
+          rounded-xl
+          p-8
+          w-full
+          max-w-md
+        "
+            >
 
-            <form onSubmit={handleSubmit}>
+                <h1
+                    className="
+            text-3xl
+            font-bold
+            text-center
+            mb-2
+          "
+                >
+                    TaskFlow
+                </h1>
 
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) =>
-                        setEmail(e.target.value)
-                    }
-                    required
-                />
-
-                <br />
-                <br />
-
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) =>
-                        setPassword(e.target.value)
-                    }
-                    required
-                />
-
-                <br />
-                <br />
-
-                <button type="submit">
-                    Login
-                </button>
-
-            </form>
-
-            {error && (
-                <p style={{ color: "red" }}>
-                    {error}
+                <p
+                    className="
+            text-center
+            text-gray-500
+            mb-6
+          "
+                >
+                    Sign in to your account
                 </p>
-            )}
+
+                <form
+                    onSubmit={handleSubmit}
+                    className="space-y-4"
+                >
+
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) =>
+                            setEmail(
+                                e.target.value
+                            )
+                        }
+                        required
+                        className="
+              w-full
+              border
+              border-gray-300
+              rounded-lg
+              px-4
+              py-3
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-500
+            "
+                    />
+
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) =>
+                            setPassword(
+                                e.target.value
+                            )
+                        }
+                        required
+                        className="
+              w-full
+              border
+              border-gray-300
+              rounded-lg
+              px-4
+              py-3
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-500
+            "
+                    />
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="
+              w-full
+              bg-blue-500
+              hover:bg-blue-600
+              text-white
+              py-3
+              rounded-lg
+              font-semibold
+              disabled:opacity-50
+            "
+                    >
+                        {loading
+                            ? "Logging in..."
+                            : "Login"}
+                    </button>
+
+                </form>
+
+                <p
+                    className="
+            text-center
+            mt-6
+            text-gray-600
+          "
+                >
+                    Don't have an account?
+
+                    <Link
+                        to="/register"
+                        className="
+              ml-1
+              text-blue-500
+              hover:underline
+            "
+                    >
+                        Register
+                    </Link>
+
+                </p>
+
+            </div>
 
         </div>
+
     );
 }
